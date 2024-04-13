@@ -1,9 +1,10 @@
 import player.Player;
-import dice.Dice;
-import coordinates.Coordinates;
 import jumper.Jumper;
 import board.Board;
 import java.util.*;
+import game.Game;
+import dice.Dice;
+import coordinates.Coordinates;
 public class App {
     public static void main(String[] args) throws Exception {
 
@@ -32,8 +33,11 @@ public class App {
         Jumper j=new Jumper(c,d);
         System.out.println(j.getJumperName());
 
-        Board b=new Board(10);
+        Board b=new Board(10,map);
         b.printBoard();
+
+        Game game=new Game(b,new Player[]{p1,p2},new Dice());
+        game.play();
 
     }
     

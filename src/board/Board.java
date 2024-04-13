@@ -4,8 +4,8 @@ import java.util.HashMap;
 import jumper.Jumper;
 public class Board {
     int size;
-    String board[][];
-    HashMap<String, Jumper> jumpers;
+     public String board[][];
+    public HashMap<String, Jumper> jumpers;
     public Board(int size, HashMap<String , Jumper> jumpers){
         this.size=size;
         this.jumpers=jumpers;

@@ -4,6 +4,8 @@ import coordinates.Coordinates;
 import board.Board;
 import player.Player;
 import dice.Dice;
+import jumper.Jumper;
+import java.util.*;
 public class Game {
     Board board;
     Player[] players;
@@ -27,9 +29,18 @@ public class Game {
     }
 
     public void play(){
+        Scanner sc=new Scanner(System.in);
         while(true){
+            
+            System.out.print(players[turn].getPlayerName()+" press 'y' to roll the dice: ");
+            String input = sc.nextLine().trim().toLowerCase();
+            if (!input.equals("y")) {
+                System.out.println("Game aborted by the player.");
+                return;
+            }
             int num=dice.diceRoll();
-            System.out.println(players[turn].getPlayerName()+" rolled -> "+num+places[turn]);
+            System.out.println(players[turn].getPlayerName()+" rolled -> "+num);
+            
 
             if(!isAllowed[turn]){
                 if(num!=1){
@@ -41,7 +52,19 @@ public class Game {
                 }
             }
 
+            String currentPosition = getCurrentPositionString(turn);
+            System.out.println(players[turn].getPlayerName() + " is at position: " + currentPosition);
+
             Coordinates newCoordinates=getNewCoordinates(places[turn],num);
+            
+            if(newCoordinates.getRow()<0){
+                System.out.println(players[turn].getPlayerName()+" has won!");
+                return;
+            }
+            
+
+            places[turn]=newCoordinates;
+            turn=1-turn;
 
 
 
@@ -67,11 +90,22 @@ public class Game {
         }
 
         if(row<0) return new Coordinates(row, col);
-        if(checkIfJumperExists){
+        if(checkIfJumperExists(row,col)){
+            Jumper jumper=board.jumpers.get(board.board[row][col]);
+
+            return jumper.end;
             
         }
+        return new Coordinates(row, col);
     }
 
+    private String getCurrentPositionString(int turn) {
+        Coordinates currentPos = places[turn];
+        return board.board[currentPos.getRow()][currentPos.getCol()];
+    }
 
+    private boolean checkIfJumperExists(int row, int col){
+            return board.jumpers.containsKey(board.board[row][col]);
+}
 
 }
